@@ -1,13 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, IsOptional } from 'class-validator';
+import { IsEmail, IsString, IsOptional, IsDateString } from 'class-validator';
 
-// CORREGIDO: "class" en lugar de "classQr"
 export class RegisterDto {
-  @ApiProperty({ example: 'Juan Vendedor' })
+  @ApiProperty({ example: 'Juan Perez' })
   @IsString()
   nombre: string;
 
-  @ApiProperty({ example: 'vendedor@tienda.cl' })
+  @ApiProperty({ example: 'juan@duoc.cl' })
   @IsEmail()
   email: string;
 
@@ -15,7 +14,16 @@ export class RegisterDto {
   @IsString()
   password: string;
 
-  @ApiProperty({ example: 'vendedor', required: false })
+  @ApiProperty({ example: '1990-01-01', description: 'Debe ser mayor de 18' })
+  @IsDateString()
+  fechaNacimiento: string;
+
+  @ApiProperty({ example: 'CODIGO123', required: false })
+  @IsString()
+  @IsOptional()
+  codigoReferidoUsado?: string;
+
+  @ApiProperty({ example: 'cliente', required: false })
   @IsString()
   @IsOptional()
   role?: string;
