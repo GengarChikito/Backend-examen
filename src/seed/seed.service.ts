@@ -54,7 +54,7 @@ export class SeedService implements OnModuleInit {
     const total = await this.productRepo.count();
     if (total > 0) return;
 
-    console.log('🌱 Sembrando Catálogo Completo de la Rúbrica...');
+    console.log('🌱 Sembrando Catálogo Completo (Incluyendo Polerones)...');
 
     const productos = [
       {
@@ -136,6 +136,15 @@ export class SeedService implements OnModuleInit {
         precio: 14990,
         stock: 50,
         imagen: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80'
+      },
+      // 1. NUEVO PRODUCTO AGREGADO
+      {
+        nombre: 'Polerón Gamer Pro',
+        categoria: 'Polerones Gamers Personalizados',
+        descripcion: 'Polerón con capucha y diseño exclusivo de la tienda.',
+        precio: 29990,
+        stock: 40,
+        imagen: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80'
       }
     ];
 

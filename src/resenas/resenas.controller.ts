@@ -22,4 +22,11 @@ export class ResenasController {
   findByProduct(@Param('id') id: string) {
     return this.resenasService.findByProduct(+id);
   }
+
+  // 2. NUEVO ENDPOINT AGREGADO
+  @Get()
+  @ApiOperation({ summary: 'Ver todas las reseñas (Muro de la fama)' })
+  findAll() {
+    return this.resenasService.findAll();
+  }
 }

@@ -1,53 +1,61 @@
-# 📦 Backend - Sistema de Ventas (API RESTful)
+# 🎮 Backend - Level-Up Gamer API
 
-Este es el Backend para el sistema de gestión de ventas "TiendaApp". Está construido con *NestJS* y utiliza *MySQL* como base de datos. Proporciona una API robusta para la gestión de productos, usuarios, autenticación y registro de ventas con control de stock.
+Backend desarrollado en **NestJS** para el sistema de punto de venta y e-commerce "Level-Up Gamer". Esta API gestiona la lógica de negocio, incluyendo gamificación, descuentos automáticos, control de stock y reseñas.
 
-## 🚀 Tecnologías Utilizadas
+## 🚀 Tecnologías
 
-* *Framework:* [NestJS](https://nestjs.com/) (Node.js)
-* *Lenguaje:* TypeScript
-* *Base de Datos:* MySQL
-* *ORM:* TypeORM
-* *Autenticación:* JWT (JSON Web Tokens) & Passport
-* *Documentación:* Swagger (OpenAPI)
-* *Testing:* Jest (100% Cobertura Unitaria)
+* **Framework:** NestJS
+* **Base de Datos:** MySQL (`examen_db`)
+* **ORM:** TypeORM
+* **Seguridad:** JWT & Bcrypt
+* **Documentación:** Swagger
+
+## ✨ Funcionalidades Principales
+
+### 👤 Usuarios & Gamificación
+* **Registro:** Validación de mayoría de edad (+18).
+* **Sistema de Puntos (LevelUp):** Se acumula el 5% de cada compra como puntos.
+* **Referidos:** Bonificación de puntos al registrarse con código de referido.
+* **Descuento Duoc:** Detección automática de correos `@duoc.cl` para asignar un **20% de descuento** permanente.
+
+### 🛒 Ventas & Boletas
+* **Carro de Compras:** Validación de stock en tiempo real.
+* **Cálculo de Totales:** Aplicación automática de descuentos y cálculo de IVA.
+* **Historial:** Registro completo de transacciones con detalle de productos.
+
+### ⭐ Reseñas
+* **Sistema de Calificación:** Los usuarios pueden calificar (1-5 estrellas) y comentar los productos comprados.
+* **Muro de la Fama:** Endpoint para listar las mejores opiniones de la comunidad.
+
+### 📦 Catálogo
+* **Gestión de Productos:** CRUD completo (Crear, Leer, Actualizar, Eliminar).
+* **Categorías:** Soporte para múltiples categorías (Consolas, Accesorios, Ropa Gamer, etc.).
 
 ---
 
-## 📋 Requisitos Previos
+## 🛠️ Instalación y Puesta en Marcha
 
-Antes de comenzar, asegúrate de tener instalado:
+1.  **Base de Datos:**
+    Asegúrate de tener MySQL corriendo y crea la base de datos:
+    ```sql
+    CREATE DATABASE examen_db;
+    ```
 
-1.  *Node.js* (v18 o superior)
-2.  *MySQL Server* (Corriendo en el puerto 3306)
-3.  *npm* (Gestor de paquetes)
+2.  **Configuración:**
+    Verifica las credenciales en `src/app.module.ts` (por defecto: `root` / `1234`).
 
----
-
-## 🛠️ Instalación y Configuración
-
-1.  *Clonar el repositorio:*
-    bash
-    git clone <https://github.com/Juan-Fernandez-Jaime/Backend>
-    cd backend
-
-
-2.  *Instalar dependencias:*
-    bash
+3.  **Instalar Dependencias:**
+    ```bash
     npm install
+    ```
 
+4.  **Iniciar Servidor:**
+    ```bash
+    npm run start
+    ```
+    *Al iniciar, el **Seed** poblará automáticamente la base de datos con usuarios y productos de prueba si está vacía.*
 
-3.  *Configurar Base de Datos:*
-    * Asegúrate de tener un servidor MySQL corriendo.
-    * Crea una base de datos vacía llamada evaluacion_db (o el nombre que prefieras).
-    * Nota: Por defecto, el proyecto busca conectar a localhost con usuario root y contraseña 1234. Puedes cambiar esto en src/app.module.ts.
+## 📄 Documentación API (Swagger)
 
----
-
-## ▶️ Ejecución del Proyecto
-
-### Modo Desarrollo (Recomendado)
-Este modo activa el *"Hot Reload"* (recarga automática) y ejecuta el *Seed* (llenado de datos) si la base de datos está vacía.
-
-```bash
-npm run start
+Una vez corriendo, visita:
+👉 **http://localhost:4000/api**

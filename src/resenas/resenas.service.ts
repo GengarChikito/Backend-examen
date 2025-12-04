@@ -31,4 +31,12 @@ export class ResenasService {
       order: { fecha: 'DESC' }
     });
   }
+
+  // 1. NUEVO MÉTODO AGREGADO
+  async findAll() {
+    return this.resenaRepo.find({
+      relations: ['usuario', 'producto'], // Traemos quién escribió y de qué producto
+      order: { fecha: 'DESC' }
+    });
+  }
 }

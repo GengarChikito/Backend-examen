@@ -24,8 +24,9 @@ export class BoletasService {
     nuevaBoleta.metodoPago = dto.metodoPago || 'EFECTIVO';
     nuevaBoleta.detalles = [];
 
-    let subtotal = 0;
+    let subtotalAcumulado = 0;
 
+    // 1. Procesar productos y calcular subtotal bruto
     for (const item of dto.detalles) {
       const producto = await this.prodRepo.findOneBy({ id: item.productoId });
       if (!producto) throw new NotFoundException(`Producto ${item.productoId} no existe`);
@@ -37,20 +38,25 @@ export class BoletasService {
       detalle.subtotal = producto.precio * item.cantidad;
 
       nuevaBoleta.detalles.push(detalle);
-      subtotal += detalle.subtotal;
+      subtotalAcumulado += detalle.subtotal;
 
+      // Actualizar Stock
       producto.stock -= item.cantidad;
       await this.prodRepo.save(producto);
     }
 
+    // 2. Aplicar Descuento DUOC (20%)
     if (usuario.esEstudianteDuoc) {
-      nuevaBoleta.descuentoAplicado = subtotal * 0.20;
-      nuevaBoleta.total = subtotal - nuevaBoleta.descuentoAplicado;
+      // Math.round para evitar decimales en pesos
+      nuevaBoleta.descuentoAplicado = Math.round(subtotalAcumulado * 0.20);
     } else {
       nuevaBoleta.descuentoAplicado = 0;
-      nuevaBoleta.total = subtotal;
     }
 
+    // 3. Calcular Total Final
+    nuevaBoleta.total = subtotalAcumulado - nuevaBoleta.descuentoAplicado;
+
+    // 4. Sumar Puntos LevelUp (5% del total pagado)
     const puntosGanados = Math.floor(nuevaBoleta.total * 0.05);
     usuario.puntosLevelUp += puntosGanados;
     await this.usuarioRepo.save(usuario);
