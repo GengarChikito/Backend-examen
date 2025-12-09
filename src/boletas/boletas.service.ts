@@ -15,6 +15,18 @@ export class BoletasService {
     @InjectRepository(Usuario) private usuarioRepo: Repository<Usuario>,
   ) {}
 
+  // 1. Helper para calcular descuento por nivel (Gamificación)
+  private getLevelDiscount(puntos: number): number {
+    if (puntos >= 8000) return 0.25; // 25% Master Gamer
+    if (puntos >= 4000) return 0.22; // 22% Gaming Legend
+    if (puntos >= 2000) return 0.18; // 18% Elite Player
+    if (puntos >= 1000) return 0.15; // 15% Pro Gamer
+    if (puntos >= 500) return 0.12;  // 12% Dedicated Gamer
+    if (puntos >= 250) return 0.08;  // 8%  Gaming Enthusiast
+    if (puntos >= 100) return 0.05;  // 5%  Casual Player
+    return 0;                        // 0%  Rookie
+  }
+
   async create(dto: CreateBoletaDto, usuarioPayload: any) {
     const usuario = await this.usuarioRepo.findOneBy({ id: usuarioPayload.id });
     if (!usuario) throw new NotFoundException('Usuario no encontrado');
@@ -26,7 +38,7 @@ export class BoletasService {
 
     let subtotalAcumulado = 0;
 
-    // 1. Procesar productos y calcular subtotal bruto
+    // Procesar productos y calcular subtotal bruto
     for (const item of dto.detalles) {
       const producto = await this.prodRepo.findOneBy({ id: item.productoId });
       if (!producto) throw new NotFoundException(`Producto ${item.productoId} no existe`);
@@ -45,18 +57,29 @@ export class BoletasService {
       await this.prodRepo.save(producto);
     }
 
-    // 2. Aplicar Descuento DUOC (20%)
+    // 2. Lógica de Descuentos (Se aplica el mejor descuento disponible)
+    let descuentoPorcentaje = 0;
+
+    // A. Descuento DUOC (20%)
     if (usuario.esEstudianteDuoc) {
-      // Math.round para evitar decimales en pesos
-      nuevaBoleta.descuentoAplicado = Math.round(subtotalAcumulado * 0.20);
-    } else {
-      nuevaBoleta.descuentoAplicado = 0;
+      descuentoPorcentaje = 0.20;
     }
 
-    // 3. Calcular Total Final
+    // B. Descuento por Nivel (Gamificación)
+    const descuentoNivel = this.getLevelDiscount(usuario.puntosLevelUp);
+
+    // Aplicamos el mayor de los dos descuentos
+    if (descuentoNivel > descuentoPorcentaje) {
+      descuentoPorcentaje = descuentoNivel;
+    }
+
+    // Aplicar descuento
+    nuevaBoleta.descuentoAplicado = Math.round(subtotalAcumulado * descuentoPorcentaje);
+
+    // Calcular Total Final
     nuevaBoleta.total = subtotalAcumulado - nuevaBoleta.descuentoAplicado;
 
-    // 4. Sumar Puntos LevelUp (5% del total pagado)
+    // Sumar nuevos Puntos LevelUp (5% del total pagado)
     const puntosGanados = Math.floor(nuevaBoleta.total * 0.05);
     usuario.puntosLevelUp += puntosGanados;
     await this.usuarioRepo.save(usuario);

@@ -3,10 +3,14 @@ import { BoletasService } from './boletas.service';
 import { CreateBoletaDto } from './dto/create-boleta.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+// MODIFICACIÓN: Imports añadidos
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { UserRole } from '../entities/usuario.entity';
 
 @ApiTags('Ventas')
-@ApiBearerAuth('access-token') // Protege todo el controlador en Swagger
-@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth('access-token')
+@UseGuards(AuthGuard('jwt'), RolesGuard) // MODIFICACIÓN: Se agrega RolesGuard
 @Controller('boletas')
 export class BoletasController {
   constructor(private readonly boletasService: BoletasService) {}
@@ -20,6 +24,7 @@ export class BoletasController {
   }
 
   @Get()
+  @Roles(UserRole.ADMIN) // MODIFICACIÓN: Restricción solo para Admin
   @ApiOperation({ summary: 'Ver historial completo de ventas' })
   @ApiResponse({ status: 200, description: 'Lista de todas las boletas.' })
   findAll() {

@@ -11,6 +11,10 @@ import { Producto } from './entities/producto.entity';
 import { Boleta } from './entities/boleta.entity';
 import { DetalleBoleta } from './entities/detalle-boleta.entity';
 import { Resena } from './entities/resena.entity';
+import { EventosModule } from './eventos/eventos.module'; // Importar módulo
+import { Evento } from './entities/evento.entity';
+import { BlogsModule } from './blogs/blogs.module';
+import { Blog } from './entities/blog.entity';
 
 @Module({
   imports: [
@@ -21,7 +25,7 @@ import { Resena } from './entities/resena.entity';
       username: 'root',
       password: '1234',
       database: 'examen_db',
-      entities: [Usuario, Producto, Boleta, DetalleBoleta, Resena],
+      entities: [Usuario, Producto, Boleta, DetalleBoleta, Resena, Evento, Blog],
       synchronize: true,
       dropSchema: false,
     }),
@@ -31,6 +35,8 @@ import { Resena } from './entities/resena.entity';
     UsuariosModule,
     SeedModule,
     ResenasModule,
+    EventosModule,
+    BlogsModule,
   ],
 })
 export class AppModule {}
