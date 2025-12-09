@@ -1,5 +1,10 @@
-import { PartialType } from '@nestjs/swagger';
-import { RegisterDto } from '../../auth/dto/register.dto'; // Importamos el DTO de registro
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateUsuarioDto } from './create-usuario.dto';
+import { IsNumber, IsOptional } from 'class-validator';
 
-// PartialType hace que todos los campos de RegisterDto sean opcionales automáticamente
-export class UpdateUsuarioDto extends PartialType(RegisterDto) {}
+export class UpdateUsuarioDto extends PartialType(CreateUsuarioDto) {
+  // Permitimos que el frontend envíe 'puntosLevelUp' para actualizar
+  @IsNumber()
+  @IsOptional()
+  puntosLevelUp?: number;
+}

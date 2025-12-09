@@ -1,75 +1,74 @@
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-  InternalServerErrorException
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Usuario } from '../entities/usuario.entity';
-import * as bcrypt from 'bcrypt';
+// IMPORTANTE: Importar UserRole para poder hacer el casting
+import { Usuario, UserRole } from '../entities/usuario.entity';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
 @Injectable()
 export class UsuariosService {
   constructor(
     @InjectRepository(Usuario)
-    private readonly usuarioRepository: Repository<Usuario>,
+    private usuarioRepo: Repository<Usuario>,
   ) {}
 
-  async findAll() {
-    return await this.usuarioRepository.find({
-      select: ['id', 'nombre', 'email', 'role']
+  create(createUsuarioDto: CreateUsuarioDto) {
+    // CORRECCIÓN: Convertimos los tipos manualmente
+    const usuario = this.usuarioRepo.create({
+      ...createUsuarioDto,
+      // 1. Convertimos string a Date
+      fechaNacimiento: new Date(createUsuarioDto.fechaNacimiento),
+      // 2. Forzamos el string a ser tratado como UserRole
+      role: (createUsuarioDto.role as UserRole) || UserRole.CLIENTE,
     });
+
+    return this.usuarioRepo.save(usuario);
   }
 
-  // --- NUEVO MÉTODO AGREGADO ---
+  findAll() {
+    return this.usuarioRepo.find();
+  }
+
   async findOne(id: number) {
-    const user = await this.usuarioRepository.findOne({
-      where: { id },
-      // Incluimos miCodigoReferido para mostrarlo en el perfil
-      select: ['id', 'nombre', 'email', 'fechaNacimiento', 'puntosLevelUp', 'role', 'miCodigoReferido']
-    });
-    if (!user) throw new NotFoundException('Usuario no encontrado');
-    return user;
+    const usuario = await this.usuarioRepo.findOneBy({ id });
+    if (!usuario) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+    }
+    return usuario;
   }
-  // -----------------------------
 
-  async update(id: number, data: any) {
-    const user = await this.usuarioRepository.findOneBy({ id });
-    if (!user) throw new NotFoundException('Usuario no encontrado');
+  async findOneByEmail(email: string) {
+    return this.usuarioRepo.findOneBy({ email });
+  }
 
-    // Validar contraseña vacía
-    if (data.password && data.password.trim() !== '') {
-      const salt = await bcrypt.genSalt();
-      data.password = await bcrypt.hash(data.password, salt);
-    } else {
-      delete data.password;
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    // Preparar datos para actualizar corrigiendo tipos si vienen definidos
+    const updateData: any = { ...updateUsuarioDto };
+
+    if (updateUsuarioDto.fechaNacimiento) {
+      updateData.fechaNacimiento = new Date(updateUsuarioDto.fechaNacimiento);
     }
 
-    this.usuarioRepository.merge(user, data);
-
-    try {
-      return await this.usuarioRepository.save(user);
-    } catch (error) {
-      if (error.errno === 1062) {
-        throw new ConflictException('El correo electrónico ya está registrado por otro usuario.');
-      }
-      throw new InternalServerErrorException('Error al actualizar el usuario');
+    if (updateUsuarioDto.role) {
+      updateData.role = updateUsuarioDto.role as UserRole;
     }
+
+    // CORRECCIÓN: Usamos los datos ya convertidos
+    const usuario = await this.usuarioRepo.preload({
+      id: id,
+      ...updateData,
+    });
+
+    if (!usuario) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+    }
+
+    return this.usuarioRepo.save(usuario);
   }
 
   async remove(id: number) {
-    try {
-      const result = await this.usuarioRepository.delete(id);
-      if (result.affected === 0) {
-        throw new NotFoundException('Usuario no encontrado');
-      }
-      return { message: 'Usuario eliminado correctamente' };
-    } catch (error) {
-      if (error.errno === 1451) {
-        throw new ConflictException('No se puede eliminar el usuario porque tiene ventas registradas.');
-      }
-      throw error;
-    }
+    const usuario = await this.findOne(id);
+    return this.usuarioRepo.remove(usuario);
   }
 }
