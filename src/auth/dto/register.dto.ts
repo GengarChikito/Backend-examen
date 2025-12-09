@@ -1,30 +1,34 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, IsOptional, IsDateString } from 'class-validator';
+import { IsString, IsEmail, MinLength, IsOptional, IsNumber, IsDateString } from 'class-validator';
 
 export class RegisterDto {
-  @ApiProperty({ example: 'Juan Perez' })
   @IsString()
   nombre: string;
 
-  @ApiProperty({ example: 'juan@duoc.cl' })
-  @IsEmail()
+  @IsEmail({}, { message: 'El correo debe ser válido' })
   email: string;
 
-  @ApiProperty({ example: '123' })
   @IsString()
+  @MinLength(6, { message: 'La contraseña debe tener mínimo 6 caracteres' })
   password: string;
 
-  @ApiProperty({ example: '1990-01-01', description: 'Debe ser mayor de 18' })
-  @IsDateString()
+  @IsDateString({}, { message: 'La fecha debe ser válida (YYYY-MM-DD)' })
   fechaNacimiento: string;
 
-  @ApiProperty({ example: 'CODIGO123', required: false })
-  @IsString()
-  @IsOptional()
-  codigoReferidoUsado?: string;
+  // --- AGREGAMOS ESTOS CAMPOS FALTANTES ---
 
-  @ApiProperty({ example: 'cliente', required: false })
   @IsString()
   @IsOptional()
   role?: string;
+
+  @IsNumber()
+  @IsOptional()
+  puntosLevelUp?: number;
+
+  @IsString()
+  @IsOptional()
+  miCodigoReferido?: string;
+
+  @IsString()
+  @IsOptional()
+  codigoReferidoUsado?: string;
 }

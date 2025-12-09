@@ -7,6 +7,7 @@ import {
   IsBoolean,
   IsNumber,
 } from 'class-validator';
+import { Type } from 'class-transformer'; // <--- Importación necesaria
 
 export class CreateUsuarioDto {
   @IsString()
@@ -32,6 +33,7 @@ export class CreateUsuarioDto {
   @IsOptional()
   esEstudianteDuoc?: boolean;
 
+  @Type(() => Number) // <--- Convierte "100" (string) a 100 (number)
   @IsNumber()
   @IsOptional()
   puntosLevelUp?: number;

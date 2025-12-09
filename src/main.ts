@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe, Logger } from '@nestjs/common'; // 1. Importamos Logger
+import { ValidationPipe, Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const logger = new Logger('Bootstrap'); // 2. Creamos una instancia del Logger
+  const logger = new Logger('Bootstrap');
 
   app.setGlobalPrefix('api');
   app.enableCors();
@@ -14,6 +14,10 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transform: true, // <--- IMPORTANTE: Activa la conversión automática
+      transformOptions: {
+        enableImplicitConversion: true, // <--- Ayuda a convertir tipos primitivos
+      },
     }),
   );
 
@@ -41,7 +45,6 @@ async function bootstrap() {
 
   await app.listen(4000);
 
-  // 3. Agregamos el mensaje en consola con el link
   logger.log('🚀 Swagger iniciado en: http://localhost:4000/api');
 }
 bootstrap();
