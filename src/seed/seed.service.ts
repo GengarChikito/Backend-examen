@@ -34,7 +34,7 @@ export class SeedService implements OnModuleInit {
 
     console.log('🌱 Sembrando Usuarios...');
     const salt = await bcrypt.genSalt();
-    const password = await bcrypt.hash('123', salt);
+    const password = await bcrypt.hash('123', salt); // Contraseña general para seeds
 
     const usuarios = [
       {
@@ -53,6 +53,16 @@ export class SeedService implements OnModuleInit {
         esEstudianteDuoc: true,
         fechaNacimiento: '2000-05-15',
         miCodigoReferido: 'JUAN01',
+      },
+      // --- NUEVO USUARIO INVITADO ---
+      {
+        nombre: 'Invitado',
+        email: 'invitado@levelup.com',
+        password, // Usa la misma contraseña '123'
+        role: UserRole.CLIENTE,
+        esEstudianteDuoc: false,
+        fechaNacimiento: '2000-01-01',
+        miCodigoReferido: 'GUEST00',
       },
     ];
 
