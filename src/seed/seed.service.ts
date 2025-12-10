@@ -59,7 +59,7 @@ export class SeedService implements OnModuleInit {
         nombre: 'Invitado',
         email: 'invitado@levelup.com',
         password, // Usa la misma contraseña '123'
-        role: UserRole.CLIENTE,
+        role: UserRole.INVITADO,
         esEstudianteDuoc: false,
         fechaNacimiento: '2000-01-01',
         miCodigoReferido: 'GUEST00',

@@ -6,8 +6,10 @@ import {
   IsDateString,
   IsBoolean,
   IsNumber,
+  IsEnum,
 } from 'class-validator';
-import { Type } from 'class-transformer'; // <--- Importación necesaria
+import { Type } from 'class-transformer';
+import { UserRole } from '../../entities/usuario.entity'; // Importamos el Enum
 
 export class CreateUsuarioDto {
   @IsString()
@@ -23,17 +25,17 @@ export class CreateUsuarioDto {
   @IsDateString({}, { message: 'La fecha debe ser formato ISO (YYYY-MM-DD)' })
   fechaNacimiento: string;
 
-  // --- CAMPOS OPCIONALES (Se autogeneran o son para admin) ---
+  // --- CAMPOS OPCIONALES ---
 
-  @IsString()
   @IsOptional()
-  role?: string; // 'admin' | 'cliente'
+  @IsEnum(UserRole, { message: 'El rol debe ser: admin, vendedor, cliente o invitado' })
+  role?: UserRole;
 
   @IsBoolean()
   @IsOptional()
   esEstudianteDuoc?: boolean;
 
-  @Type(() => Number) // <--- Convierte "100" (string) a 100 (number)
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
   puntosLevelUp?: number;
@@ -44,5 +46,5 @@ export class CreateUsuarioDto {
 
   @IsString()
   @IsOptional()
-  codigoReferidoUsado?: string; // El código de quien lo invitó
+  codigoReferidoUsado?: string;
 }
