@@ -14,18 +14,16 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
-      transform: true, // <--- IMPORTANTE: Activa la conversión automática
+      transform: true,
       transformOptions: {
-        enableImplicitConversion: true, // <--- Ayuda a convertir tipos primitivos
+        enableImplicitConversion: true,
       },
     }),
   );
 
   const config = new DocumentBuilder()
     .setTitle('API Sistema de Ventas')
-    .setDescription(
-      'Documentación de la API para gestión de productos, ventas y usuarios.',
-    )
+    .setDescription('Documentación de la API')
     .setVersion('1.0')
     .addBearerAuth(
       {
@@ -43,8 +41,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(4000);
+  // Usar puerto del entorno o 4000
+  const PORT = process.env.PORT || 4000;
+  await app.listen(PORT);
 
-  logger.log('🚀 Swagger iniciado en: http://localhost:4000/api');
+  logger.log(`🚀 Swagger iniciado en: http://localhost:${PORT}/api`);
 }
 bootstrap();
