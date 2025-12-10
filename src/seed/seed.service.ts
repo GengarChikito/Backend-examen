@@ -94,7 +94,7 @@ export class SeedService implements OnModuleInit {
         precio: 24990,
         stock: 15,
         imagen:
-          'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=800&q=80',
+          'https://x.boardgamearena.net/data/gamemedia/carcassonne/box/en_280.png?h=1732011834',
       },
       {
         nombre: 'Controlador Xbox Series X',
@@ -103,7 +103,7 @@ export class SeedService implements OnModuleInit {
         precio: 59990,
         stock: 10,
         imagen:
-          'https://images.unsplash.com/photo-1629429408209-1f912961dbd8?auto=format&fit=crop&w=800&q=80',
+          'https://tecexpresshn.com/wp-content/uploads/2024/01/69d1f81d-b517-4efe-b287-4b31b95551a0.8ba9998f4e64ff9332a843ca6df629de-e1706216073977.webp',
       },
       {
         nombre: 'Audífonos HyperX Cloud II',
@@ -112,7 +112,7 @@ export class SeedService implements OnModuleInit {
         precio: 79990,
         stock: 12,
         imagen:
-          'https://images.unsplash.com/photo-1612444530582-fc66183b16f7?auto=format&fit=crop&w=800&q=80',
+          'https://i5.walmartimages.com/asr/8ee123f2-1677-4dde-837e-d37fd2a7ff7a.f393872a6b16695f5da48d7f16cbb454.png',
       },
       {
         nombre: 'PlayStation 5',
@@ -130,7 +130,7 @@ export class SeedService implements OnModuleInit {
         precio: 1299990,
         stock: 3,
         imagen:
-          'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=800&q=80',
+          'https://sipoonline.cl/wp-content/uploads/2024/05/Pc-Gamer-Asus-Strix_Intel-Core-i9-14900KF-64GB-DDR5-5600mhz-RTX-4090-24GB.png',
       },
       {
         nombre: 'Silla Gamer Secretlab Titan',
@@ -139,16 +139,16 @@ export class SeedService implements OnModuleInit {
         precio: 349990,
         stock: 7,
         imagen:
-          'https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=800&q=80',
+          'https://images-na.ssl-images-amazon.com/images/I/41vyYB3rS9L.jpg',
       },
       {
-        nombre: 'Mouse Logitech G502 HERO',
+        nombre: 'Logitech G Pro X Superlight 2 Lightspeed',
         categoria: 'Mouse',
         descripcion: 'Sensor óptico avanzado para máxima precisión.',
         precio: 49990,
         stock: 25,
         imagen:
-          'https://images.unsplash.com/photo-1615663245857-acda5b2b15d5?auto=format&fit=crop&w=800&q=80',
+          'https://media.falabella.com/falabellaCL/146918248_01/w=1200,h=1200,fit=pad',
       },
       {
         nombre: 'Mousepad Razer Goliathus',
@@ -157,7 +157,7 @@ export class SeedService implements OnModuleInit {
         precio: 29990,
         stock: 30,
         imagen:
-          'https://images.unsplash.com/photo-1629377750731-9a74421b53f6?auto=format&fit=crop&w=800&q=80',
+          'https://media.spdigital.cl/thumbnails/products/tmpamvuxbye_86f7b5fc_thumbnail_512.jpg',
       },
       {
         nombre: 'Polera Gamer Level-Up',
@@ -166,7 +166,7 @@ export class SeedService implements OnModuleInit {
         precio: 14990,
         stock: 50,
         imagen:
-          'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80',
+          'https://www.gustore.cl/img/estampados/8305/8305_1.png',
       },
       {
         nombre: 'Polerón Gamer Pro',
@@ -175,7 +175,7 @@ export class SeedService implements OnModuleInit {
         precio: 29990,
         stock: 40,
         imagen:
-          'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80',
+          'https://www.gustore.cl/img/estampados/3548/3548_9.png',
       },
     ];
 
